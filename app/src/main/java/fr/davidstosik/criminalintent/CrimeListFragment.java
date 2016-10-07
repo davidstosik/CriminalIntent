@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -39,13 +40,14 @@ public class CrimeListFragment extends Fragment {
         binding.crimeRecyclerView.setAdapter(mAdapter);
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder {
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private View mItemView;
         private Crime mCrime;
 
         public CrimeHolder(View itemView) {
             super(itemView);
             mItemView = itemView;
+            mItemView.setOnClickListener(this);
         }
 
         public View getView() {
@@ -58,6 +60,12 @@ public class CrimeListFragment extends Fragment {
             binding.listItemCrimeTitleTextView.setText(crime.getTitle());
             binding.listItemCrimeDateTextView.setText(crime.getDate().toString());
             binding.listItemCrimeSolvedCheckbox.setChecked(crime.isSolved());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(),
+                    mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT);
         }
     }
 
