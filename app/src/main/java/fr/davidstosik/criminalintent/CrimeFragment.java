@@ -1,13 +1,10 @@
 package fr.davidstosik.criminalintent;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +19,6 @@ public class CrimeFragment extends Fragment {
 
     private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
-    private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_fragment.crime_id";
 
     private Crime mCrime;
     private FragmentCrimeBinding binding;
@@ -49,6 +45,7 @@ public class CrimeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
+        binding.setCrime(mCrime);
         binding.crimeTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -65,10 +62,6 @@ public class CrimeFragment extends Fragment {
                 // This one too
             }
         });
-        binding.crimeTitleField.setText(mCrime.getTitle());
-        String date = DateFormat.format("EEEE, MMM dd, yyyyy", mCrime.getDate()).toString();
-        binding.crimeDate.setText(date);
-        binding.crimeSolved.setChecked(mCrime.isSolved());
         binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -76,14 +69,5 @@ public class CrimeFragment extends Fragment {
             }
         });
         return binding.getRoot();
-    }
-
-    public int returnResult(Intent intent) {
-        intent.putExtra(EXTRA_CRIME_ID, mCrime.getId());
-        return Activity.RESULT_OK;
-    }
-
-    public static UUID getModifiedCrimeId(Intent result) {
-        return (UUID) result.getSerializableExtra(EXTRA_CRIME_ID);
     }
 }

@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable name="crime" type="fr.davidstosik.criminalintent.Crime" />
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -12,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:padding="4dp"/>
+            android:padding="4dp"
+            android:checked="@{crime.solved}" />
 
         <TextView
             android:id="@+id/list_item_crime_title_text_view"
@@ -21,7 +26,8 @@
             android:layout_toLeftOf="@id/list_item_crime_solved_checkbox"
             android:textStyle="bold"
             android:padding="4dp"
-            tools:text="Crime Title" />
+            tools:text="Crime Title"
+            android:text="@{crime.title}" />
 
         <TextView
             android:id="@+id/list_item_crime_date_text_view"
@@ -30,7 +36,8 @@
             android:layout_toLeftOf="@id/list_item_crime_solved_checkbox"
             android:layout_below="@id/list_item_crime_title_text_view"
             android:padding="4dp"
-            tools:text="Crime date" />
+            tools:text="Crime date"
+            android:text="@{crime.date.toString()}" />
 
     </RelativeLayout>
 

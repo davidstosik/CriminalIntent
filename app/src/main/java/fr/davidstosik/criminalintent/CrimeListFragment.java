@@ -25,7 +25,6 @@ import fr.davidstosik.criminalintent.databinding.ListItemCrimeBinding;
 public class CrimeListFragment extends Fragment {
 
     private static final String TAG = "CrimeListFragment";
-    public static final int REQUEST_CRIME = 1;
     private FragmentCrimeListBinding binding;
     private CrimeAdapter mAdapter;
 
@@ -75,41 +74,20 @@ public class CrimeListFragment extends Fragment {
             Log.d(TAG, "bindCrime()");
             mCrime = crime;
             ListItemCrimeBinding binding = DataBindingUtil.getBinding(mItemView);
-            binding.listItemCrimeTitleTextView.setText(crime.getTitle());
-            binding.listItemCrimeDateTextView.setText(crime.getDate().toString());
-            binding.listItemCrimeSolvedCheckbox.setChecked(crime.isSolved());
             binding.listItemCrimeSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mCrime.setSolved(isChecked);
                 }
             });
+            binding.setCrime(crime);
         }
 
         @Override
         public void onClick(View v) {
             Log.d(TAG, String.format("Calling new intent on %s", mCrime.getId().toString()));
             Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
-            startActivityForResult(intent, REQUEST_CRIME);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult()");
-        if (resultCode != Activity.RESULT_OK) {
-            Log.d(TAG, "resultCode not OK");
-            return;
-        }
-        switch (requestCode) {
-            case REQUEST_CRIME:
-                Log.d(TAG, "REQUEST_CRIME");
-                UUID crimeId = CrimeActivity.getModifiedCrimeId(data);
-                Log.d(TAG, "Crime id = " + crimeId.toString());
-                int position = CrimeLab.get(getContext()).getPosition(crimeId);
-                Log.d(TAG, "position = " + String.valueOf(position));
-                mAdapter.notifyItemChanged(position);
-                break;
+            startActivity(intent);
         }
     }
 
