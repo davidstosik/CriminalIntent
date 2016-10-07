@@ -41,6 +41,8 @@ public class CrimeListFragment extends Fragment {
 
     private class CrimeHolder extends RecyclerView.ViewHolder {
         private View mItemView;
+        private Crime mCrime;
+
         public CrimeHolder(View itemView) {
             super(itemView);
             mItemView = itemView;
@@ -51,6 +53,7 @@ public class CrimeListFragment extends Fragment {
         }
 
         public void bindCrime(Crime crime) {
+            mCrime = crime;
             ListItemCrimeBinding binding = DataBindingUtil.getBinding(mItemView);
             binding.listItemCrimeTitleTextView.setText(crime.getTitle());
             binding.listItemCrimeDateTextView.setText(crime.getDate().toString());
