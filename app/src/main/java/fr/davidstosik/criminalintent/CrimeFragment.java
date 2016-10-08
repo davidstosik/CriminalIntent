@@ -19,6 +19,7 @@ import fr.davidstosik.criminalintent.databinding.FragmentCrimeBinding;
 public class CrimeFragment extends Fragment {
 
     private static final String TAG = "CrimeFragment";
+    private static final String ARG_CRIME_ID = "crime_id";
     private Crime mCrime;
     private FragmentCrimeBinding binding;
 
@@ -26,10 +27,19 @@ public class CrimeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        UUID id = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        UUID id = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         Log.d(TAG, String.format("Crime id in intent's extra: %s", id.toString()));
         mCrime = CrimeLab.get(getActivity()).getCrime(id);
         Log.d(TAG, String.format("Was a Crime retrieved? %s", String.valueOf(mCrime != null)));
+    }
+
+    public static CrimeFragment newInstance(UUID crimeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -51,10 +61,10 @@ public class CrimeFragment extends Fragment {
                 // This one too
             }
         });
-        // String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
+        binding.crimeTitleField.setText(mCrime.getTitle());
         String date = DateFormat.format("EEEE, MMM dd, yyyyy", mCrime.getDate()).toString();
         binding.crimeDate.setText(date);
-        binding.crimeDate.setEnabled(false);
+        binding.crimeSolved.setChecked(mCrime.isSolved());
         binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
