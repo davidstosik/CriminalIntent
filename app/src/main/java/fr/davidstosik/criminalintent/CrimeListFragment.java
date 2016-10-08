@@ -1,5 +1,6 @@
 package fr.davidstosik.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -16,8 +17,6 @@ import java.util.UUID;
 
 import fr.davidstosik.criminalintent.databinding.FragmentCrimeListBinding;
 import fr.davidstosik.criminalintent.databinding.ListItemCrimeBinding;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by sto on 10/3/16.
@@ -91,7 +90,7 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult()");
-        if (resultCode != RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK) {
             Log.d(TAG, "resultCode not OK");
             return;
         }

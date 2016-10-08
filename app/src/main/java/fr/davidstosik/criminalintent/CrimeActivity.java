@@ -3,6 +3,7 @@ package fr.davidstosik.criminalintent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import java.util.UUID;
@@ -10,21 +11,25 @@ import java.util.UUID;
 public class CrimeActivity extends SingleFragmentActivity {
 
     private static final String TAG = "CrimeActivity";
-    private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_id";
-    private UUID mCrimeId;
+    private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_activity.crime_id";
 
     @Override
     protected Fragment createFragment() {
-        mCrimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
-        return CrimeFragment.newInstance(mCrimeId);
+        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(crimeId);
     }
 
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed()");
+
+        FragmentManager fm = getSupportFragmentManager();
+        CrimeFragment fragment = (CrimeFragment) fm.findFragmentById(R.id.fragment_container);
+
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_CRIME_ID, mCrimeId);
-        setResult(RESULT_OK, intent);
+        int result = fragment.returnResult(intent);
+        setResult(result, intent);
+
         super.onBackPressed();
     }
 
@@ -36,7 +41,7 @@ public class CrimeActivity extends SingleFragmentActivity {
         return intent;
     }
 
-    public static UUID getModifiedCrimeId(Intent result) {
-        return (UUID) result.getSerializableExtra(EXTRA_CRIME_ID);
+    public static UUID getModifiedCrimeId(Intent data) {
+        return CrimeFragment.getModifiedCrimeId(data);
     }
 }
