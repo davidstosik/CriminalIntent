@@ -41,7 +41,7 @@ public class CrimeLab {
     public Crime getCrime(UUID id) {
         Log.d(TAG, String.format("getCrime(%s)", id.toString()));
         for (Crime crime : mCrimes) {
-            if (crime.getId() == id) {
+            if (crime.getId().equals(id)) {
                 Log.d(TAG, "Returning a Crime.");
                 return crime;
             }
