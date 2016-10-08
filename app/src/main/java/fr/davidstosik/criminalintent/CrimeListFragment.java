@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import fr.davidstosik.criminalintent.databinding.ListItemCrimeBinding;
  */
 public class CrimeListFragment extends Fragment {
 
+    private static final String TAG = "CrimeListFragment";
     private FragmentCrimeListBinding binding;
     private CrimeAdapter mAdapter;
 
@@ -67,6 +69,7 @@ public class CrimeListFragment extends Fragment {
             Toast.makeText(getActivity(),
                     mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
                     .show();
+            Log.d(TAG, String.format("Calling new intent on %s", mCrime.getId().toString()));
         }
     }
 

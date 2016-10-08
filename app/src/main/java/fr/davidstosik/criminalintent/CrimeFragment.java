@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import fr.davidstosik.criminalintent.databinding.FragmentCrimeBinding;
 
 public class CrimeFragment extends Fragment {
 
+    private static final String TAG = "CrimeFragment";
     private Crime mCrime;
     private FragmentCrimeBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         mCrime = new Crime();
     }

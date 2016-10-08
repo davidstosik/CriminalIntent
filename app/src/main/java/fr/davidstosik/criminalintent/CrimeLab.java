@@ -1,6 +1,7 @@
 package fr.davidstosik.criminalintent;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.UUID;
  */
 public class CrimeLab {
 
+    private static final String TAG = "CrimeLab";
     private static CrimeLab sCrimeLab;
     private List<Crime> mCrimes;
 
@@ -37,11 +39,14 @@ public class CrimeLab {
     }
 
     public Crime getCrime(UUID id) {
+        Log.d(TAG, String.format("getCrime(%s)", id.toString()));
         for (Crime crime : mCrimes) {
             if (crime.getId() == id) {
+                Log.d(TAG, "Returning a Crime.");
                 return crime;
             }
         }
+        Log.d(TAG, "Returning null.");
         return null;
     }
 }
