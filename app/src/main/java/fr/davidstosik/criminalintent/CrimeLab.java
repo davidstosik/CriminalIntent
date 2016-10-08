@@ -49,4 +49,13 @@ public class CrimeLab {
         Log.d(TAG, "Returning null.");
         return null;
     }
+
+    public int getPosition(UUID crimeId) {
+        for (int position = 0; position < mCrimes.size(); position++) {
+            if (mCrimes.get(position).getId().equals(crimeId)) {
+                return position;
+            }
+        }
+        return -1;
+    }
 }

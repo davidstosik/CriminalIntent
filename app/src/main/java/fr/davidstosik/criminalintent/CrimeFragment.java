@@ -1,5 +1,6 @@
 package fr.davidstosik.criminalintent;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -9,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.databinding.DataBindingUtil;
 import android.widget.CompoundButton;
 
 import java.util.UUID;
@@ -20,6 +20,7 @@ public class CrimeFragment extends Fragment {
 
     private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
+
     private Crime mCrime;
     private FragmentCrimeBinding binding;
 
@@ -73,5 +74,4 @@ public class CrimeFragment extends Fragment {
         });
         return binding.getRoot();
     }
-
 }

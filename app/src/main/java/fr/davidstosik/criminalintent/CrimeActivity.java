@@ -11,11 +11,21 @@ public class CrimeActivity extends SingleFragmentActivity {
 
     private static final String TAG = "CrimeActivity";
     private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_id";
+    private UUID mCrimeId;
 
     @Override
     protected Fragment createFragment() {
-        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
-        return CrimeFragment.newInstance(crimeId);
+        mCrimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(mCrimeId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed()");
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CRIME_ID, mCrimeId);
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 
     public static Intent newIntent(Context packageContext, UUID crimeId) {
@@ -24,5 +34,9 @@ public class CrimeActivity extends SingleFragmentActivity {
         Intent intent = new Intent(packageContext, CrimeActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;
+    }
+
+    public static UUID getModifiedCrimeId(Intent result) {
+        return (UUID) result.getSerializableExtra(EXTRA_CRIME_ID);
     }
 }
