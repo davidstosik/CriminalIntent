@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import java.util.List;
 import java.util.UUID;
@@ -77,6 +78,12 @@ public class CrimeListFragment extends Fragment {
             binding.listItemCrimeTitleTextView.setText(crime.getTitle());
             binding.listItemCrimeDateTextView.setText(crime.getDate().toString());
             binding.listItemCrimeSolvedCheckbox.setChecked(crime.isSolved());
+            binding.listItemCrimeSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mCrime.setSolved(isChecked);
+                }
+            });
         }
 
         @Override
