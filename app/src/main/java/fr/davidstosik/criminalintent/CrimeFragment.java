@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.databinding.DataBindingUtil;
 import android.widget.CompoundButton;
 
+import java.util.UUID;
+
 import fr.davidstosik.criminalintent.databinding.FragmentCrimeBinding;
 
 public class CrimeFragment extends Fragment {
@@ -24,7 +26,10 @@ public class CrimeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        UUID id = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID);
+        Log.d(TAG, String.format("Crime id in intent's extra: %s", id.toString()));
+        mCrime = CrimeLab.get(getActivity()).getCrime(id);
+        Log.d(TAG, String.format("Was a Crime retrieved? %s", String.valueOf(mCrime != null)));
     }
 
     @Override

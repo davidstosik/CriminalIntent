@@ -1,5 +1,6 @@
 package fr.davidstosik.criminalintent;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,10 +67,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(),
-                    mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
             Log.d(TAG, String.format("Calling new intent on %s", mCrime.getId().toString()));
+            startActivity(CrimeActivity.newIntent(getActivity(), mCrime.getId()));
         }
     }
 
