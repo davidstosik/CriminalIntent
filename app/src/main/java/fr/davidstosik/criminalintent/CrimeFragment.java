@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import java.util.Date;
 import java.util.UUID;
 
 import fr.davidstosik.criminalintent.databinding.FragmentCrimeBinding;
@@ -22,6 +24,8 @@ public class CrimeFragment extends Fragment {
 
     private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
+    private static final String DIALOG_DATE = "DialogDate";
+    private static final int REQUEST_DATE = 0;
 
     private Crime mCrime;
     private FragmentCrimeBinding binding;
@@ -46,6 +50,29 @@ public class CrimeFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult()");
+        if (resultCode != Activity.RESULT_OK) {
+            Log.d(TAG, "RESULT is not OK");
+            return;
+        }
+        switch (requestCode) {
+            case REQUEST_DATE:
+                Log.d(TAG, "REQUEST_DATE");
+                Date date = DatePickerFragment.getDate(data);
+                Log.d(TAG, "retrieved date: " + date.toString());
+                mCrime.setDate(date);
+                updateDate();
+                break;
+        }
+    }
+
+    private void updateDate() {
+        String date = DateFormat.format("EEEE, MMM dd, yyyyy", mCrime.getDate()).toString();
+        binding.crimeDate.setText(date);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
         binding.crimeTitleField.addTextChangedListener(new TextWatcher() {
@@ -65,8 +92,16 @@ public class CrimeFragment extends Fragment {
             }
         });
         binding.crimeTitleField.setText(mCrime.getTitle());
-        String date = DateFormat.format("EEEE, MMM dd, yyyyy", mCrime.getDate()).toString();
-        binding.crimeDate.setText(date);
+        updateDate();
+        binding.crimeDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+                dialog.show(manager, DIALOG_DATE);
+            }
+        });
         binding.crimeSolved.setChecked(mCrime.isSolved());
         binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
