@@ -99,7 +99,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
-                DateTimePickerFragment dialog = DateTimePickerFragment.newDatePickerInstance(mCrime.getDate());
+                DateTimePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
                 dialog.show(manager, DIALOG_DATE_TIME);
             }
@@ -108,7 +108,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
-                DateTimePickerFragment dialog = DateTimePickerFragment.newTimePickerInstance(mCrime.getDate());
+                DateTimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
                 dialog.show(manager, DIALOG_DATE_TIME);
             }
