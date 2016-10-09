@@ -39,7 +39,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="Mon Oct 03 21:49:26 GMT+09:00 2016" />
+                tools:text="Mon Oct 03 2016" />
+
+            <Button
+                android:id="@+id/crime_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="21:49:26" />
 
             <CheckBox
                 android:id="@+id/crime_solved"

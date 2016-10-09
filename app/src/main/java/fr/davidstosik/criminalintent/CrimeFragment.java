@@ -24,8 +24,8 @@ public class CrimeFragment extends Fragment {
 
     private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
-    private static final String DIALOG_DATE = "DialogDate";
-    private static final int REQUEST_DATE = 0;
+    private static final String DIALOG_DATE_TIME = "DialogDateTime";
+    private static final int REQUEST_DATE_TIME = 0;
 
     private Crime mCrime;
     private FragmentCrimeBinding binding;
@@ -57,9 +57,9 @@ public class CrimeFragment extends Fragment {
             return;
         }
         switch (requestCode) {
-            case REQUEST_DATE:
-                Log.d(TAG, "REQUEST_DATE");
-                Date date = DatePickerFragment.getDate(data);
+            case REQUEST_DATE_TIME:
+                Log.d(TAG, "REQUEST_DATE_TIME");
+                Date date = DateTimePickerFragment.getDate(data);
                 Log.d(TAG, "retrieved date: " + date.toString());
                 mCrime.setDate(date);
                 updateDate();
@@ -68,8 +68,10 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateDate() {
-        String date = DateFormat.format("EEEE, MMM dd, yyyyy", mCrime.getDate()).toString();
+        String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
         binding.crimeDate.setText(date);
+        String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
+        binding.crimeTime.setText(time);
     }
 
     @Override
@@ -97,9 +99,18 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
-                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
-                dialog.show(manager, DIALOG_DATE);
+                DateTimePickerFragment dialog = DateTimePickerFragment.newDatePickerInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
+                dialog.show(manager, DIALOG_DATE_TIME);
+            }
+        });
+        binding.crimeTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                DateTimePickerFragment dialog = DateTimePickerFragment.newTimePickerInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
+                dialog.show(manager, DIALOG_DATE_TIME);
             }
         });
         binding.crimeSolved.setChecked(mCrime.isSolved());
