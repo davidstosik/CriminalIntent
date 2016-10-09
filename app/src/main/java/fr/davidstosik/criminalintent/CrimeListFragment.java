@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,14 @@ public class CrimeListFragment extends Fragment {
             mCrime = crime;
             ListItemCrimeBinding binding = DataBindingUtil.getBinding(mItemView);
             binding.listItemCrimeTitleTextView.setText(crime.getTitle());
-            binding.listItemCrimeDateTextView.setText(crime.getDate().toString());
+            String date = DateFormat.getLongDateFormat(getActivity())
+                    .format(crime.getDate())
+                    .toString();
+            String time = DateFormat.getTimeFormat(getActivity())
+                    .format(crime.getDate())
+                    .toString();
+            String date_time = getResources().getString(R.string.date_time_format, date, time);
+            binding.listItemCrimeDateTextView.setText(date_time);
             binding.listItemCrimeSolvedCheckbox.setChecked(crime.isSolved());
             binding.listItemCrimeSolvedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
