@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_container_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:padding="4dp"
+        tools:text="Picker title: " />
+
+    <ViewStub
+        android:id="@+id/dialog_container_picker_stub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/dialog_container_title">
+    </ViewStub>
+
+    <Button
+        android:id="@+id/dialog_date_submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/ok"
+        android:layout_gravity="end"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_margin="4dp" />
+
+</LinearLayout>

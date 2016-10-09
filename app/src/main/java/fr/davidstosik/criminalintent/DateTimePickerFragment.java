@@ -1,16 +1,14 @@
 package fr.davidstosik.criminalintent;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,28 +24,28 @@ public abstract class DateTimePickerFragment extends DialogFragment {
     private static final String EXTRA_DATE = "fr.davidstosik.criminalintent.date";
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateDialog");
-
-        return new AlertDialog.Builder(getActivity())
-                .setView(setUpView())
-                .setTitle(getTitleResId())
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "DialogInterface.OnClickListener.onClick");
-                        sendResult(Activity.RESULT_OK, getPickerCalendar().getTime());
-                    }
-                })
-                .create();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = setUpView(inflater, container);
+        view.findViewById(R.id.dialog_date_submit_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendResult(Activity.RESULT_OK, getPickerCalendar().getTime());
+                dismiss();
+            }
+        });
+        return view;
     }
 
     protected View setUpView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(getLayoutResId(), container);
-    }
+        View view = inflater.inflate(R.layout.dialog_container, container);
 
-    protected View setUpView() {
-        return setUpView(LayoutInflater.from(getActivity()), null);
+        ((TextView) view.findViewById(R.id.dialog_container_title)).setText(getTitleResId());
+
+        ViewStub stub = (ViewStub) view.findViewById(R.id.dialog_container_picker_stub);
+        stub.setLayoutResource(getLayoutResId());
+        View inflated = stub.inflate();
+
+        return view;
     }
 
     protected abstract int getLayoutResId();
