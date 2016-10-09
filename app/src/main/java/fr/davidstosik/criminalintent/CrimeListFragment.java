@@ -89,7 +89,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Log.d(TAG, String.format("Calling new intent on %s", mCrime.getId().toString()));
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivityForResult(intent, REQUEST_CRIME);
         }
     }
@@ -104,11 +104,12 @@ public class CrimeListFragment extends Fragment {
         switch (requestCode) {
             case REQUEST_CRIME:
                 Log.d(TAG, "REQUEST_CRIME");
-                UUID crimeId = CrimeActivity.getModifiedCrimeId(data);
-                Log.d(TAG, "Crime id = " + crimeId.toString());
-                int position = CrimeLab.get(getContext()).getPosition(crimeId);
-                Log.d(TAG, "position = " + String.valueOf(position));
-                mAdapter.notifyItemChanged(position);
+//                UUID crimeId = CrimeActivity.getModifiedCrimeId(data);
+//                Log.d(TAG, "Crime id = " + crimeId.toString());
+//                int position = CrimeLab.get(getContext()).getPosition(crimeId);
+//                Log.d(TAG, "position = " + String.valueOf(position));
+//                mAdapter.notifyItemChanged(position);
+                mAdapter.notifyDataSetChanged();
                 break;
         }
     }
