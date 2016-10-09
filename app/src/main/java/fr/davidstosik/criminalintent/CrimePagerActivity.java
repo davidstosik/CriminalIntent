@@ -10,8 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.ViewGroup;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -22,8 +26,11 @@ public class CrimePagerActivity extends FragmentActivity {
 
     private static final String TAG = "CrimePagerActivity";
     private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_pager_activity.crime_id";
+    private static final String EXTRA_CHANGED_CRIME_IDS = "fr.davidstosik.criminalintent.crime_pager_activity.changed_crime_ids";
+    private static final String KEY_CHANGED_CRIME_IDS = "changed_crime_ids";
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
+    private Set<UUID> mChangedCrimeIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +41,28 @@ public class CrimePagerActivity extends FragmentActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.activity_crime_pager_view_pager);
         mCrimes = CrimeLab.get(this).getCrimes();
+
+        if (savedInstanceState != null) {
+            mChangedCrimeIds = (HashSet<UUID>) savedInstanceState.getSerializable(KEY_CHANGED_CRIME_IDS);
+            Log.d(TAG, "Retrieved saved instance of mChangedCrimeIds: " + mChangedCrimeIds.toString());
+        }
+        if (mChangedCrimeIds == null) {
+            mChangedCrimeIds = new HashSet<>();
+            Log.d(TAG, "New empty instance of mChangedCrimeIds");
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
                 return CrimeFragment.newInstance(crime.getId());
+            }
+
+            @Override
+            public void setPrimaryItem(ViewGroup container, int position, Object object) {
+                Crime crime = mCrimes.get(position);
+                mChangedCrimeIds.add(crime.getId());
             }
 
             @Override
@@ -57,10 +80,23 @@ public class CrimePagerActivity extends FragmentActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.d(TAG, "Saving instance of mChangedCrimeIds: " + mChangedCrimeIds.toString());
+        savedInstanceState.putSerializable(KEY_CHANGED_CRIME_IDS, (Serializable) mChangedCrimeIds);
+    }
+
+    @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed()");
-        setResult(Activity.RESULT_OK, null);
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CHANGED_CRIME_IDS, (Serializable) mChangedCrimeIds);
+        setResult(Activity.RESULT_OK, intent);
         super.onBackPressed();
+    }
+
+    public static Set<UUID> getModifiedCrimeIds(Intent result) {
+        return (HashSet<UUID>) result.getSerializableExtra(EXTRA_CHANGED_CRIME_IDS);
     }
 
 }

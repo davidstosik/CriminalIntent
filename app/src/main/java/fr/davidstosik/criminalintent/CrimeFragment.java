@@ -22,7 +22,6 @@ public class CrimeFragment extends Fragment {
 
     private static final String TAG = "CrimeFragment";
     private static final String ARG_CRIME_ID = "crime_id";
-    private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_fragment.crime_id";
 
     private Crime mCrime;
     private FragmentCrimeBinding binding;
@@ -76,14 +75,5 @@ public class CrimeFragment extends Fragment {
             }
         });
         return binding.getRoot();
-    }
-
-    public int returnResult(Intent intent) {
-        intent.putExtra(EXTRA_CRIME_ID, mCrime.getId());
-        return Activity.RESULT_OK;
-    }
-
-    public static UUID getModifiedCrimeId(Intent result) {
-        return (UUID) result.getSerializableExtra(EXTRA_CRIME_ID);
     }
 }

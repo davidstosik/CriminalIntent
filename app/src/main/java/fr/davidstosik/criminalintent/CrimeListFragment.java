@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import fr.davidstosik.criminalintent.databinding.FragmentCrimeListBinding;
@@ -104,12 +105,13 @@ public class CrimeListFragment extends Fragment {
         switch (requestCode) {
             case REQUEST_CRIME:
                 Log.d(TAG, "REQUEST_CRIME");
-//                UUID crimeId = CrimeActivity.getModifiedCrimeId(data);
-//                Log.d(TAG, "Crime id = " + crimeId.toString());
-//                int position = CrimeLab.get(getContext()).getPosition(crimeId);
-//                Log.d(TAG, "position = " + String.valueOf(position));
-//                mAdapter.notifyItemChanged(position);
-                mAdapter.notifyDataSetChanged();
+                Set<UUID> crimeIds = CrimePagerActivity.getModifiedCrimeIds(data);
+                Log.d(TAG, "Crime ids = " + crimeIds.toString());
+                for (UUID crimeId : crimeIds) {
+                    int position = CrimeLab.get(getContext()).getPosition(crimeId);
+                    Log.d(TAG, "position = " + String.valueOf(position));
+                    mAdapter.notifyItemChanged(position);
+                }
                 break;
         }
     }
