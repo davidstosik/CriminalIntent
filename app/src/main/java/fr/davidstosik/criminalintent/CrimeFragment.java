@@ -95,24 +95,8 @@ public class CrimeFragment extends Fragment {
         });
         binding.crimeTitleField.setText(mCrime.getTitle());
         updateDate();
-        binding.crimeDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager manager = getFragmentManager();
-                DateTimePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
-                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
-                dialog.show(manager, DIALOG_DATE_TIME);
-            }
-        });
-        binding.crimeTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager manager = getFragmentManager();
-                DateTimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
-                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
-                dialog.show(manager, DIALOG_DATE_TIME);
-            }
-        });
+        binding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
+        binding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
         binding.crimeSolved.setChecked(mCrime.isSolved());
         binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -121,5 +105,40 @@ public class CrimeFragment extends Fragment {
             }
         });
         return binding.getRoot();
+    }
+
+    private class PickerButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (false) { // FIXME: depends on device size
+                FragmentManager manager = getFragmentManager();
+                DateTimePickerFragment dialog;
+                switch (v.getId()) {
+                    case R.id.crime_date_button:
+                        dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                        break;
+                    case R.id.crime_time_button:
+                        dialog = TimePickerFragment.newInstance(mCrime.getDate());
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
+                dialog.show(manager, DIALOG_DATE_TIME);
+            } else {
+                Intent intent;
+                switch (v.getId()) {
+                    case R.id.crime_date_button:
+                        intent = DateTimePickerActivity.newDatePickerIntent(getActivity(), mCrime.getDate());
+                        break;
+                    case R.id.crime_time_button:
+                        intent = DateTimePickerActivity.newTimePickerIntent(getActivity(), mCrime.getDate());
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+                startActivityForResult(intent, REQUEST_DATE_TIME);
+            }
+        }
     }
 }

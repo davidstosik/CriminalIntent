@@ -30,20 +30,19 @@ public abstract class DateTimePickerFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 sendResult(Activity.RESULT_OK, getPickerCalendar().getTime());
-                dismiss();
             }
         });
         return view;
     }
 
     protected View setUpView(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(R.layout.dialog_container, container);
+        View view = inflater.inflate(R.layout.dialog_container, container, false);
 
         ((TextView) view.findViewById(R.id.dialog_container_title)).setText(getTitleResId());
 
         ViewStub stub = (ViewStub) view.findViewById(R.id.dialog_container_picker_stub);
         stub.setLayoutResource(getLayoutResId());
-        View inflated = stub.inflate();
+        stub.inflate();
 
         return view;
     }
@@ -61,14 +60,16 @@ public abstract class DateTimePickerFragment extends DialogFragment {
     }
 
     public void sendResult(int resultCode, Date date) {
-        if (getTargetFragment() == null) {
-            return;
-        }
-
         Intent intent = new Intent();
         intent.putExtra(EXTRA_DATE, date);
 
-        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
+        if (getTargetFragment() == null) {
+            getActivity().setResult(Activity.RESULT_OK, intent);
+            getActivity().finish();
+        } else {
+            getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
+            dismiss();
+        }
     }
 
     public static Date getDate(Intent data) {
