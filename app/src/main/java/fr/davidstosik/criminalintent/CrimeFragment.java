@@ -110,7 +110,7 @@ public class CrimeFragment extends Fragment {
     private class PickerButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if (false) { // FIXME: depends on device size
+            if (getResources().getBoolean(R.bool.large_layout)) {
                 FragmentManager manager = getFragmentManager();
                 DateTimePickerFragment dialog;
                 switch (v.getId()) {
