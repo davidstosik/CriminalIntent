@@ -28,7 +28,7 @@
             style="?android:listSeparatorTextViewStyle" />
 
         <Button
-            android:id="@+id/crime_date"
+            android:id="@+id/crime_date_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -36,7 +36,7 @@
             tools:text="Mon Oct 03 2016" />
 
         <Button
-            android:id="@+id/crime_time"
+            android:id="@+id/crime_time_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

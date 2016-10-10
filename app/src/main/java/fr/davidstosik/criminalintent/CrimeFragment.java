@@ -69,9 +69,9 @@ public class CrimeFragment extends Fragment {
 
     private void updateDate() {
         String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
-        binding.crimeDate.setText(date);
+        binding.crimeDateButton.setText(date);
         String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
-        binding.crimeTime.setText(time);
+        binding.crimeTimeButton.setText(time);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CrimeFragment extends Fragment {
         });
         binding.crimeTitleField.setText(mCrime.getTitle());
         updateDate();
-        binding.crimeDate.setOnClickListener(new View.OnClickListener() {
+        binding.crimeDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
@@ -104,7 +104,7 @@ public class CrimeFragment extends Fragment {
                 dialog.show(manager, DIALOG_DATE_TIME);
             }
         });
-        binding.crimeTime.setOnClickListener(new View.OnClickListener() {
+        binding.crimeTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
