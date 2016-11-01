@@ -38,7 +38,13 @@ public abstract class DateTimePickerFragment extends DialogFragment {
     protected View setUpView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.dialog_container, container, false);
 
-        ((TextView) view.findViewById(R.id.dialog_container_title)).setText(getTitleResId());
+        TextView title = ((TextView) view.findViewById(R.id.dialog_container_title));
+        if (getTargetFragment() == null) {
+            title.setText(getTitleResId());
+        } else {
+            title.setVisibility(View.GONE);
+            getDialog().setTitle(getTitleResId());
+        }
 
         ViewStub stub = (ViewStub) view.findViewById(R.id.dialog_container_picker_stub);
         stub.setLayoutResource(getLayoutResId());
