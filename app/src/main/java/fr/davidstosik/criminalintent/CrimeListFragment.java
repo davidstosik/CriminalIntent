@@ -56,6 +56,8 @@ public class CrimeListFragment extends Fragment {
             Log.d(TAG, "mAdapter is null");
             mAdapter = new CrimeAdapter(crimes);
             binding.crimeRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
         }
     }
 
