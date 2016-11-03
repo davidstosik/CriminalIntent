@@ -27,7 +27,7 @@ public class CrimeLab {
         return sCrimeLab;
     }
 
-    public void addcrime(Crime c) {
+    public void addCrime(Crime c) {
         mCrimes.add(c);
     }
 
