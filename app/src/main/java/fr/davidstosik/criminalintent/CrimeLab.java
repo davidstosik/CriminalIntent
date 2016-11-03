@@ -31,6 +31,17 @@ public class CrimeLab {
         mCrimes.add(c);
     }
 
+    public void deleteCrime(Crime c) {
+        if (c == null) {
+            return;
+        }
+        int index = getPosition(c.getId());
+        if (index == -1) {
+            return;
+        }
+        mCrimes.remove(index);
+    }
+
     public List<Crime> getCrimes() {
         return mCrimes;
     }
