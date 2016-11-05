@@ -61,6 +61,7 @@ public class CrimePagerActivity extends AppCompatActivity {
 
             @Override
             public void setPrimaryItem(ViewGroup container, int position, Object object) {
+                super.setPrimaryItem(container, position, object);
                 Crime crime = mCrimes.get(position);
                 mChangedCrimeIds.add(crime.getId());
             }
