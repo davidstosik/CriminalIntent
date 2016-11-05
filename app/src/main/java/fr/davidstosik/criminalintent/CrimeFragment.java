@@ -44,6 +44,12 @@ public class CrimeFragment extends Fragment {
         Log.d(TAG, String.format("Was a Crime retrieved? %s", String.valueOf(mCrime != null)));
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+    }
+
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_CRIME_ID, crimeId);
