@@ -39,6 +39,7 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -54,6 +55,7 @@ public class CrimeListFragment extends Fragment {
         }
         updateUI();
 
+        Log.d(TAG, "END - onCreateView()");
         return binding.crimeRecyclerView;
     }
 
@@ -102,6 +104,7 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void updateSubtitle() {
+        Log.d(TAG, "updateSubtitle()");
         String subtitle = null;
         if (mSubtitleVisible) {
             CrimeLab crimeLab = CrimeLab.get(getActivity());
@@ -123,20 +126,28 @@ public class CrimeListFragment extends Fragment {
         } else {
             mAdapter.notifyDataSetChanged();
         }
+        if (crimes.size() == 0) {
+            binding.emptyList.setVisibility(View.VISIBLE);
+        } else {
+            binding.emptyList.setVisibility(View.GONE);
+        }
         updateSubtitle();
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private static final String TAG = "CrimeHolder";
         private View mItemView;
         private Crime mCrime;
 
         public CrimeHolder(View itemView) {
             super(itemView);
+            Log.d(TAG, "CrimeHolder()");
             mItemView = itemView;
             mItemView.setOnClickListener(this);
         }
 
         public View getView() {
+            Log.d(TAG, "getView()");
             return mItemView;
         }
 
@@ -192,13 +203,17 @@ public class CrimeListFragment extends Fragment {
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
+        private static final String TAG = "CrimeAdapter";
+
         private List<Crime> mCrimes;
         public CrimeAdapter(List<Crime> crimes) {
+            Log.d(TAG, "CrimeAdapter()");
             mCrimes = crimes;
         }
 
         @Override
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Log.d(TAG, "onCreateViewHolder()");
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_crime, parent, false).getRoot();
             return new CrimeHolder(view);
@@ -206,6 +221,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
+            Log.d(TAG, "onBindViewHolder()");
             Crime crime = mCrimes.get(position);
             holder.bindCrime(crime);
         }
