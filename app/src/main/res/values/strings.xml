@@ -17,4 +17,15 @@
     </plurals>
     <string name="empty_message">There is no Crime to show.</string>
     <string name="add_button">Add a new Crime</string>
+    <string name="choose_suspect_button">Choose suspect</string>
+    <string name="send_report_button">Send Crime report</string>
+    <string name="crime_report">%1$s!
+        The crime was discovered on %2$s. %3$s, and %4$s
+    </string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <string name="crime_report_no_suspect">there is no suspect.</string>
+    <string name="crime_report_suspect">the suspect is %s.</string>
+    <string name="crime_report_subject">CriminalIntent Crime Report</string>
+    <string name="send_report">Send crime report via</string>
 </resources>
