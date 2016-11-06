@@ -97,7 +97,7 @@ public class CrimeFragment extends Fragment {
                     c.moveToFirst();
                     String suspect = c.getString(0);
                     mCrime.setSuspect(suspect);
-                    binding.crimeSuspectButton.setText(suspect);
+                    updateSuspect();
                 } finally {
                     c.close();
                 }
@@ -110,6 +110,14 @@ public class CrimeFragment extends Fragment {
         binding.crimeDateButton.setText(date);
         String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
         binding.crimeTimeButton.setText(time);
+    }
+
+    private void updateSuspect() {
+        String label = mCrime.getSuspect();
+        if (label == null) {
+            label = getString(R.string.choose_suspect_button);
+        }
+        binding.crimeSuspectButton.setText(label);
     }
 
     @Override
@@ -132,9 +140,7 @@ public class CrimeFragment extends Fragment {
             }
         });
         binding.crimeTitleField.setText(mCrime.getTitle());
-        if (mCrime.getSuspect() != null) {
-            binding.crimeSuspectButton.setText(mCrime.getSuspect());
-        }
+        updateSuspect();
         updateDate();
         binding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
         binding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
