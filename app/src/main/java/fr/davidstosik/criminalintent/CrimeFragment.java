@@ -51,18 +51,67 @@ public class CrimeFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
+        binding.crimeTitleField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // This space intentionally left blank
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mCrime.setTitle(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // This one too
+            }
+        });
+        binding.crimeTitleField.setText(mCrime.getTitle());
+        updateSuspect();
+        updateDate();
+        binding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
+        binding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
+        binding.crimeSolved.setChecked(mCrime.isSolved());
+        binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mCrime.setSolved(isChecked);
+            }
+        });
+        binding.crimeReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = ShareCompat.IntentBuilder.from(getActivity())
+                        .setSubject(getString(R.string.crime_report_subject))
+                        .setText(getCrimeReport())
+                        .setType("text/plain")
+                        .setChooserTitle(R.string.send_report)
+                        .createChooserIntent();
+                startActivity(i);
+            }
+        });
+
+        final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        binding.crimeSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(pickContact, REQUEST_CONTACT);
+            }
+        });
+        PackageManager packageManager = getActivity().getPackageManager();
+        if (packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+            binding.crimeSuspectButton.setEnabled(false);
+        }
+        return binding.getRoot();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         CrimeLab.get(getActivity()).updateCrime(mCrime);
-    }
-
-    public static CrimeFragment newInstance(UUID crimeId) {
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_CRIME_ID, crimeId);
-
-        CrimeFragment fragment = new CrimeFragment();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -105,79 +154,6 @@ public class CrimeFragment extends Fragment {
         }
     }
 
-    private void updateDate() {
-        String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
-        binding.crimeDateButton.setText(date);
-        String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
-        binding.crimeTimeButton.setText(time);
-    }
-
-    private void updateSuspect() {
-        String label = mCrime.getSuspect();
-        if (label == null) {
-            label = getString(R.string.choose_suspect_button);
-        }
-        binding.crimeSuspectButton.setText(label);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
-        binding.crimeTitleField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // This space intentionally left blank
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCrime.setTitle(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // This one too
-            }
-        });
-        binding.crimeTitleField.setText(mCrime.getTitle());
-        updateSuspect();
-        updateDate();
-        binding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
-        binding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
-        binding.crimeSolved.setChecked(mCrime.isSolved());
-        binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCrime.setSolved(isChecked);
-            }
-        });
-        binding.crimeReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = ShareCompat.IntentBuilder.from(getActivity())
-                    .setSubject(getString(R.string.crime_report_subject))
-                    .setText(getCrimeReport())
-                    .setType("text/plain")
-                    .setChooserTitle(R.string.send_report)
-                    .createChooserIntent();
-                startActivity(i);
-            }
-        });
-
-        final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        binding.crimeSuspectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(pickContact, REQUEST_CONTACT);
-            }
-        });
-        PackageManager packageManager = getActivity().getPackageManager();
-        if (packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
-            binding.crimeSuspectButton.setEnabled(false);
-        }
-        return binding.getRoot();
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu()");
@@ -195,6 +171,30 @@ public class CrimeFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public static CrimeFragment newInstance(UUID crimeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private void updateDate() {
+        String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
+        binding.crimeDateButton.setText(date);
+        String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
+        binding.crimeTimeButton.setText(time);
+    }
+
+    private void updateSuspect() {
+        String label = mCrime.getSuspect();
+        if (label == null) {
+            label = getString(R.string.choose_suspect_button);
+        }
+        binding.crimeSuspectButton.setText(label);
     }
 
     private String getCrimeReport() {
