@@ -28,3 +28,11 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:recyclerview-v7:25.0.0'
 }
+
+tasks.whenTaskAdded { task ->
+    if(task.name == "assembleDebug" || task.name == "assembleRelease") {
+        task.doLast {
+            ['say', 'Gradle build complete.'].execute()
+        }
+    }
+}
