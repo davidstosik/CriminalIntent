@@ -11,7 +11,7 @@ import static fr.davidstosik.criminalintent.database.CrimeDbSchema.CrimeTable;
  */
 
 public class CrimeBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     private static final String DATABASE_NAME = "crimeBase.db";
 
     public CrimeBaseHelper(Context context) {
@@ -21,12 +21,13 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + CrimeTable.NAME + "(" +
-            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            CrimeTable.Cols.UUID + ", " +
-            CrimeTable.Cols.TITLE + ", " +
-            CrimeTable.Cols.DATE + ", " +
-            CrimeTable.Cols.SOLVED + ", " +
-            CrimeTable.Cols.SUSPECT +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT" +
+                ", " + CrimeTable.Cols.UUID +
+                ", " + CrimeTable.Cols.TITLE +
+                ", " + CrimeTable.Cols.DATE +
+                ", " + CrimeTable.Cols.SOLVED +
+                ", " + CrimeTable.Cols.SUSPECT +
+                ", " + CrimeTable.Cols.SUSPECT_ID +
         ")");
     }
 
@@ -34,6 +35,9 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE " + CrimeTable.NAME + " ADD COLUMN " + CrimeTable.Cols.SUSPECT);
+        }
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE " + CrimeTable.NAME + " ADD COLUMN " + CrimeTable.Cols.SUSPECT_ID);
         }
     }
 }
