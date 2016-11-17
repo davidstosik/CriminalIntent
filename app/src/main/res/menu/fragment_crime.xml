@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_item_share_crime"
+        android:icon="@drawable/ic_menu_share"
+        android:title="@string/share_crime_report"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
         android:id="@+id/menu_item_delete_crime"
         android:icon="@drawable/ic_menu_delete"
         android:title="@string/delete_crime"

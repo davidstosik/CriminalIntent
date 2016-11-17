@@ -105,18 +105,6 @@ public class CrimeFragment extends Fragment {
                 mCrime.setSolved(isChecked);
             }
         });
-        binding.crimeReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = ShareCompat.IntentBuilder.from(getActivity())
-                        .setSubject(getString(R.string.crime_report_subject))
-                        .setText(getCrimeReport())
-                        .setType("text/plain")
-                        .setChooserTitle(R.string.send_report)
-                        .createChooserIntent();
-                startActivity(i);
-            }
-        });
 
         final Intent pickContact = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
         binding.crimeSuspectButton.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +184,15 @@ public class CrimeFragment extends Fragment {
             case R.id.menu_item_delete_crime:
                 CrimeLab.get(getActivity()).deleteCrime(mCrime);
                 getActivity().finish();
+                return true;
+            case R.id.menu_item_share_crime:
+                Intent i = ShareCompat.IntentBuilder.from(getActivity())
+                        .setSubject(getString(R.string.crime_report_subject))
+                        .setText(getCrimeReport())
+                        .setType("text/plain")
+                        .setChooserTitle(R.string.send_report)
+                        .createChooserIntent();
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
