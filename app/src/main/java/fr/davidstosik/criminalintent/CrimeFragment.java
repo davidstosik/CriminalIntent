@@ -46,6 +46,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_DATE_TIME = 0;
     private static final int REQUEST_CONTACT = 1;
     private static final int REQUEST_PERMISSION_CONTACTS_FOR_VIEW = 0;
+    private static final int REQUEST_PERMISSION_CONTACTS_FOR_CALL = 1;
 
     private Crime mCrime;
     private FragmentCrimeBinding binding;
@@ -90,6 +91,12 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 view();
+            }
+        });
+        binding.crimeCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call();
             }
         });
         binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -212,6 +219,10 @@ public class CrimeFragment extends Fragment {
                 Log.d(TAG, "REQUEST_PERMISSION_CONTACTS_FOR_VIEW");
                 view();
                 break;
+            case REQUEST_PERMISSION_CONTACTS_FOR_CALL:
+                Log.d(TAG, "REQUEST_PERMISSION_CONTACTS_FOR_CALL");
+                call();
+                break;
             default:
                 break;
         }
@@ -242,6 +253,7 @@ public class CrimeFragment extends Fragment {
             enableButtons = false;
         }
         binding.crimeViewSuspectButton.setEnabled(enableButtons);
+        binding.crimeCallButton.setEnabled(enableButtons);
         binding.crimeSuspectButton.setText(label);
     }
 
@@ -343,6 +355,37 @@ public class CrimeFragment extends Fragment {
         return false;
     }
 
+    private String getCrimeSuspectPhoneNumber() {
+        Log.d(TAG, "getCrimeSuspectPhoneNumber()");
+
+        if (!ensureCrimeSuspectId(REQUEST_PERMISSION_CONTACTS_FOR_CALL)
+                || !requestContactPermission(REQUEST_PERMISSION_CONTACTS_FOR_CALL)) {
+            return null;
+        }
+
+        Cursor cursor = getActivity().getContentResolver().query(
+                Data.CONTENT_URI,
+                new String[] { Phone.NUMBER },
+                Data.CONTACT_ID + " = ?" + " AND " +
+                        RawContactsEntity.MIMETYPE + " = '" + Phone.CONTENT_ITEM_TYPE + "'",
+                new String[] { String.valueOf(mCrime.getSuspectId()) },
+                RawContactsEntity.IS_PRIMARY + " DESC"
+        );
+
+        String phoneNb = "";
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    phoneNb = cursor.getString(cursor.getColumnIndex(Phone.NUMBER));
+                    Log.d(TAG, "Phone nb: " + phoneNb);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return phoneNb;
+    }
+
     private void view() {
         Log.d(TAG, "view()");
 
@@ -353,6 +396,25 @@ public class CrimeFragment extends Fragment {
         Uri suspectUri = Uri.withAppendedPath(Contacts.CONTENT_URI, String.valueOf(mCrime.getSuspectId()));
         Log.d(TAG, "URI: " + suspectUri.toString());
         Intent i = new Intent(Intent.ACTION_VIEW, suspectUri);
+        startActivity(i);
+    }
+
+    private void call() {
+        Log.d(TAG, "call()");
+
+        String phoneNb = getCrimeSuspectPhoneNumber();
+        if (phoneNb == null) {
+            return;
+        }
+
+        if (phoneNb.isEmpty()) {
+            Toast.makeText(getContext(), R.string.no_phone_number_toast, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
+        Uri phoneUri = Uri.parse("tel:" + phoneNb);
+        Intent i = new Intent(Intent.ACTION_DIAL, phoneUri);
         startActivity(i);
     }
 

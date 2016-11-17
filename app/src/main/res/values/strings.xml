@@ -28,6 +28,7 @@
     <string name="crime_report_suspect">the suspect is %s.</string>
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="send_report">Send crime report via</string>
+    <string name="call_suspect_button">Call</string>
     <string name="crime_suspect_label">Suspect</string>
     <string name="view_suspect_button">View</string>
     <string name="contacts_permission_dialog_title">Permission to read contacts is required</string>
@@ -36,6 +37,9 @@
         \nWhen you click \"OK\", your phone will request permission to access contacts.
         \n
         \nPlease note that if you chose \"Don\'t ask again\", then the request will not show.
+    </string>
+    <string name="no_phone_number_toast">
+        Contact does not have a phone number, please use \"View\".
     </string>
     <string name="permission_denied_toast">
         Permission to access contacts was denied, cannot proceed.
