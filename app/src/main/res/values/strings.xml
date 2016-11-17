@@ -17,7 +17,7 @@
     </plurals>
     <string name="empty_message">There is no Crime to show.</string>
     <string name="add_button">Add a new Crime</string>
-    <string name="choose_suspect_button">Choose suspect</string>
+    <string name="choose_suspect_button">Choose</string>
     <string name="send_report_button">Send Crime report</string>
     <string name="crime_report">%1$s!
         The crime was discovered on %2$s. %3$s, and %4$s
@@ -28,4 +28,16 @@
     <string name="crime_report_suspect">the suspect is %s.</string>
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="send_report">Send crime report via</string>
+    <string name="crime_suspect_label">Suspect</string>
+    <string name="view_suspect_button">View</string>
+    <string name="contacts_permission_dialog_title">Permission to read contacts is required</string>
+    <string name="contacts_permission_dialog_message">
+        An update in CriminalIntent requires access to your contacts in order to update its data.
+        \nWhen you click \"OK\", your phone will request permission to access contacts.
+        \n
+        \nPlease note that if you chose \"Don\'t ask again\", then the request will not show.
+    </string>
+    <string name="permission_denied_toast">
+        Permission to access contacts was denied, cannot proceed.
+    </string>
 </resources>
