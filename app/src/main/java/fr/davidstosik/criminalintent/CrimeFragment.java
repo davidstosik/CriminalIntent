@@ -54,7 +54,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_PERMISSION_CONTACTS_FOR_CALL = 1;
 
     private Crime mCrime;
-    private FragmentCrimeBinding binding;
+    private FragmentCrimeBinding mBinding;
     private File mPhotoFile;
 
     @Override
@@ -71,8 +71,8 @@ public class CrimeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
-        binding.viewCameraAndTitle.crimeTitleField.addTextChangedListener(new TextWatcher() {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime, container, false);
+        mBinding.viewCameraAndTitle.crimeTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // This space intentionally left blank
@@ -88,26 +88,26 @@ public class CrimeFragment extends Fragment {
                 // This one too
             }
         });
-        binding.viewCameraAndTitle.crimeTitleField.setText(mCrime.getTitle());
+        mBinding.viewCameraAndTitle.crimeTitleField.setText(mCrime.getTitle());
         updateSuspect();
         updateDate();
         updatePhotoView();
-        binding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
-        binding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
-        binding.crimeSolved.setChecked(mCrime.isSolved());
-        binding.crimeViewSuspectButton.setOnClickListener(new View.OnClickListener() {
+        mBinding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
+        mBinding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
+        mBinding.crimeSolved.setChecked(mCrime.isSolved());
+        mBinding.crimeViewSuspectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 view();
             }
         });
-        binding.crimeCallButton.setOnClickListener(new View.OnClickListener() {
+        mBinding.crimeCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 call();
             }
         });
-        binding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mBinding.crimeSolved.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
@@ -115,7 +115,7 @@ public class CrimeFragment extends Fragment {
         });
 
         final Intent pickContact = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-        binding.crimeSuspectButton.setOnClickListener(new View.OnClickListener() {
+        mBinding.crimeSuspectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(pickContact, REQUEST_CONTACT);
@@ -123,24 +123,24 @@ public class CrimeFragment extends Fragment {
         });
         PackageManager packageManager = getActivity().getPackageManager();
         if (packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
-            binding.crimeSuspectButton.setEnabled(false);
+            mBinding.crimeSuspectButton.setEnabled(false);
         }
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(packageManager) != null;
-        binding.viewCameraAndTitle.crimeCamera.setEnabled(canTakePhoto);
+        mBinding.viewCameraAndTitle.crimeCamera.setEnabled(canTakePhoto);
         if (canTakePhoto) {
             Uri uri = FileProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
                     mPhotoFile);
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        binding.viewCameraAndTitle.crimeCamera.setOnClickListener(new View.OnClickListener() {
+        mBinding.viewCameraAndTitle.crimeCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -262,9 +262,9 @@ public class CrimeFragment extends Fragment {
 
     private void updateDate() {
         String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
-        binding.crimeDateButton.setText(date);
+        mBinding.crimeDateButton.setText(date);
         String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
-        binding.crimeTimeButton.setText(time);
+        mBinding.crimeTimeButton.setText(time);
     }
 
     private void updateSuspect() {
@@ -275,17 +275,17 @@ public class CrimeFragment extends Fragment {
             label = getString(R.string.choose_suspect_button);
             enableButtons = false;
         }
-        binding.crimeViewSuspectButton.setEnabled(enableButtons);
-        binding.crimeCallButton.setEnabled(enableButtons);
-        binding.crimeSuspectButton.setText(label);
+        mBinding.crimeViewSuspectButton.setEnabled(enableButtons);
+        mBinding.crimeCallButton.setEnabled(enableButtons);
+        mBinding.crimeSuspectButton.setText(label);
     }
 
     private void updatePhotoView() {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
-            binding.viewCameraAndTitle.crimePhoto.setImageDrawable(null);
+            mBinding.viewCameraAndTitle.crimePhoto.setImageDrawable(null);
         } else {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
-            binding.viewCameraAndTitle.crimePhoto.setImageBitmap(bitmap);
+            mBinding.viewCameraAndTitle.crimePhoto.setImageBitmap(bitmap);
         }
     }
 

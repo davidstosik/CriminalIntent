@@ -33,7 +33,7 @@ public class CrimeListFragment extends Fragment {
     private static final String TAG = "CrimeListFragment";
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
     public static final int REQUEST_CRIME = 1;
-    private FragmentCrimeListBinding binding;
+    private FragmentCrimeListBinding mBinding;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
 
@@ -47,15 +47,15 @@ public class CrimeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime_list, container, false);
-        binding.crimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_crime_list, container, false);
+        mBinding.crimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
         updateUI();
 
-        binding.addButton.setOnClickListener(new View.OnClickListener() {
+        mBinding.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addNewCrimeAction();
@@ -63,7 +63,7 @@ public class CrimeListFragment extends Fragment {
         });
 
         Log.d(TAG, "END - onCreateView()");
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -133,15 +133,15 @@ public class CrimeListFragment extends Fragment {
         if (mAdapter == null) {
             Log.d(TAG, "mAdapter is null");
             mAdapter = new CrimeAdapter(crimes);
-            binding.crimeRecyclerView.setAdapter(mAdapter);
+            mBinding.crimeRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setCrimes(crimes);
             mAdapter.notifyDataSetChanged();
         }
         if (crimes.size() == 0) {
-            binding.emptyList.setVisibility(View.VISIBLE);
+            mBinding.emptyList.setVisibility(View.VISIBLE);
         } else {
-            binding.emptyList.setVisibility(View.GONE);
+            mBinding.emptyList.setVisibility(View.GONE);
         }
         updateSubtitle();
     }
