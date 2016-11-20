@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private FragmentCrimeBinding mBinding;
     private File mPhotoFile;
+    private boolean mPhotoViewNeedsUpdate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,17 @@ public class CrimeFragment extends Fragment {
         mBinding.viewCameraAndTitle.crimeTitleField.setText(mCrime.getTitle());
         updateSuspect();
         updateDate();
-        updatePhotoView();
+        mPhotoViewNeedsUpdate = true;
+        mBinding.viewCameraAndTitle.crimePhoto.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mPhotoViewNeedsUpdate) {
+                    updatePhotoView();
+                    mPhotoViewNeedsUpdate = false;
+                }
+            }
+        });
+
         mBinding.crimeDateButton.setOnClickListener(new PickerButtonClickListener());
         mBinding.crimeTimeButton.setOnClickListener(new PickerButtonClickListener());
         mBinding.crimeSolved.setChecked(mCrime.isSolved());
@@ -167,7 +179,7 @@ public class CrimeFragment extends Fragment {
                 updateSuspect();
                 break;
             case REQUEST_PHOTO:
-                updatePhotoView();
+                mPhotoViewNeedsUpdate = true;
                 break;
         }
     }
@@ -259,7 +271,9 @@ public class CrimeFragment extends Fragment {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
             mBinding.viewCameraAndTitle.crimePhoto.setImageDrawable(null);
         } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            int height = mBinding.viewCameraAndTitle.crimePhoto.getHeight();
+            int width = mBinding.viewCameraAndTitle.crimePhoto.getWidth();
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), width, height);
             mBinding.viewCameraAndTitle.crimePhoto.setImageBitmap(bitmap);
         }
     }
