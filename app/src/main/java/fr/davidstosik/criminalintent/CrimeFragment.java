@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
@@ -142,6 +144,17 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivityForResult(captureImage, REQUEST_PHOTO);
+            }
+        });
+        mBinding.viewCameraAndTitle.crimePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPhotoFile != null && mPhotoFile.exists()) {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    DialogFragment newFragment = CrimePhotoDialogFragment.newInstance(mPhotoFile);
+                    newFragment.show(ft, "dialog");
+                }
             }
         });
         return mBinding.getRoot();
