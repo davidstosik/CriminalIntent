@@ -53,6 +53,18 @@ public class CrimeFragment extends Fragment {
     private File mPhotoFile;
     private boolean mPhotoViewNeedsUpdate;
 
+    private Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onCrimeUpdated(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
@@ -77,6 +89,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
+                updateCrime();
             }
 
             @Override
@@ -117,6 +130,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+                updateCrime();
             }
         });
 
@@ -179,6 +193,7 @@ public class CrimeFragment extends Fragment {
                 Date date = DateTimePickerFragment.getDate(data);
                 Log.d(TAG, "retrieved date: " + date.toString());
                 mCrime.setDate(date);
+                updateCrime();
                 updateDateView();
                 break;
             case REQUEST_CONTACT:
@@ -189,10 +204,12 @@ public class CrimeFragment extends Fragment {
                 Pair<String, Long> pair = new ContactsUtils(getActivity()).getContactNameAndIdFromUri(contactUri);
                 mCrime.setSuspect(pair.first);
                 mCrime.setSuspectId(pair.second.longValue());
+                updateCrime();
                 updateSuspectView();
                 break;
             case REQUEST_PHOTO:
                 mPhotoViewNeedsUpdate = true;
+                updateCrime();
                 break;
         }
     }
@@ -249,6 +266,12 @@ public class CrimeFragment extends Fragment {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -350,6 +373,12 @@ public class CrimeFragment extends Fragment {
         Uri phoneUri = Uri.parse("tel:" + phoneNb);
         Intent i = new Intent(Intent.ACTION_DIAL, phoneUri);
         startActivity(i);
+    }
+
+    private void updateCrime() {
+        Log.d(TAG, "updateCrime()");
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
     }
 
     private class PickerButtonClickListener implements View.OnClickListener {

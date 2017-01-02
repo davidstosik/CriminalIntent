@@ -23,7 +23,7 @@ import java.util.UUID;
  * Created by sto on 10/9/16.
  */
 
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity implements CrimeFragment.Callbacks {
 
     private static final String TAG = "CrimePagerActivity";
     private static final String EXTRA_CRIME_ID = "fr.davidstosik.criminalintent.crime_pager_activity.crime_id";
@@ -110,6 +110,11 @@ public class CrimePagerActivity extends AppCompatActivity {
         if (currentFragment != null) {
             currentFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public void onCrimeUpdated(Crime crime) {
+
     }
 
     public static Set<UUID> getModifiedCrimeIds(Intent result) {
