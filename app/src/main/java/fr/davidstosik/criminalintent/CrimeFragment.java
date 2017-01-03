@@ -85,8 +85,8 @@ public class CrimeFragment extends Fragment {
             }
         });
         mBinding.viewCameraAndTitle.crimeTitleField.setText(mCrime.getTitle());
-        updateSuspect();
-        updateDate();
+        updateSuspectView();
+        updateDateView();
         mPhotoViewNeedsUpdate = true;
         mBinding.viewCameraAndTitle.crimePhoto.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -179,7 +179,7 @@ public class CrimeFragment extends Fragment {
                 Date date = DateTimePickerFragment.getDate(data);
                 Log.d(TAG, "retrieved date: " + date.toString());
                 mCrime.setDate(date);
-                updateDate();
+                updateDateView();
                 break;
             case REQUEST_CONTACT:
                 if (data == null) {
@@ -189,7 +189,7 @@ public class CrimeFragment extends Fragment {
                 Pair<String, Long> pair = new ContactsUtils(getActivity()).getContactNameAndIdFromUri(contactUri);
                 mCrime.setSuspect(pair.first);
                 mCrime.setSuspectId(pair.second.longValue());
-                updateSuspect();
+                updateSuspectView();
                 break;
             case REQUEST_PHOTO:
                 mPhotoViewNeedsUpdate = true;
@@ -260,14 +260,14 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
-    private void updateDate() {
+    private void updateDateView() {
         String date = DateFormat.getLongDateFormat(getActivity()).format(mCrime.getDate());
         mBinding.crimeDateButton.setText(date);
         String time = DateFormat.getTimeFormat(getActivity()).format(mCrime.getDate());
         mBinding.crimeTimeButton.setText(time);
     }
 
-    private void updateSuspect() {
+    private void updateSuspectView() {
         String label = mCrime.getSuspect();
 
         boolean enableButtons = true;
