@@ -114,7 +114,12 @@ public class CrimePagerActivity extends AppCompatActivity implements CrimeFragme
 
     @Override
     public void onCrimeUpdated(Crime crime) {
+        // Nothing to do.
+    }
 
+    @Override
+    public void onCrimeDeleted(Crime crime) {
+        finish();
     }
 
     public static Set<UUID> getModifiedCrimeIds(Intent result) {

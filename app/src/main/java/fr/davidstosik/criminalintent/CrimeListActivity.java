@@ -37,4 +37,16 @@ public class CrimeListActivity extends SingleFragmentActivity
                 .findFragmentById(R.id.fragment_container);
         listFragment.updateUI();
     }
+
+    @Override
+    public void onCrimeDeleted(Crime crime) {
+        CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_container);
+        listFragment.updateUI();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detail_fragment_container);
+        getSupportFragmentManager().beginTransaction()
+                .remove(fragment)
+                .commit();
+    }
 }

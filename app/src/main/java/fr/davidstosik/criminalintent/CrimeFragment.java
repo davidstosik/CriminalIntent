@@ -57,6 +57,7 @@ public class CrimeFragment extends Fragment {
 
     public interface Callbacks {
         void onCrimeUpdated(Crime crime);
+        void onCrimeDeleted(Crime crime);
     }
 
     @Override
@@ -226,7 +227,7 @@ public class CrimeFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_delete_crime:
                 CrimeLab.get(getActivity()).deleteCrime(mCrime);
-                getActivity().finish();
+                mCallbacks.onCrimeDeleted(mCrime);
                 return true;
             case R.id.menu_item_share_crime:
                 Intent i = ShareCompat.IntentBuilder.from(getActivity())
